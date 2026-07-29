@@ -1,5 +1,8 @@
-import { MapContainer, TileLayer, LayersControl } from 'react-leaflet'
+import { useEffect } from 'react'
+import { MapContainer, TileLayer, LayersControl, useMap } from 'react-leaflet'
 import L from 'leaflet'
+import 'leaflet.fullscreen/dist/Control.FullScreen.css'
+import { FullScreen } from 'leaflet.fullscreen'
 import 'leaflet/dist/leaflet.css'
 import MarkerLayer from './MarkerLayer'
 import HotspotLayer from './HotspotLayer'
@@ -25,6 +28,24 @@ interface Props {
 // Jakarta center
 const JAKARTA_CENTER: [number, number] = [-6.2, 106.816666]
 const DEFAULT_ZOOM = 11
+
+function FullscreenControl() {
+  const map = useMap()
+  useEffect(() => {
+    const control = new FullScreen({
+      position: 'bottomleft',
+      title: 'Expand',
+      titleCancel: 'Exit fullscreen mode',
+      forceSeparateButton: true,
+      fullscreenElement: document.querySelector('.map-row') as HTMLElement || false,
+    })
+    map.addControl(control)
+    return () => {
+      map.removeControl(control)
+    }
+  }, [map])
+  return null
+}
 
 export default function MapView({
   hotspotsGeoJSON,
@@ -54,6 +75,7 @@ export default function MapView({
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom
       >
+        <FullscreenControl />
         <LayersControl position="topright">
           <LayersControl.BaseLayer checked name="OpenStreetMap">
             <TileLayer

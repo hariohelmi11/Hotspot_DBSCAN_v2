@@ -7,7 +7,8 @@ import 'leaflet/dist/leaflet.css'
 import MarkerLayer from './MarkerLayer'
 import HotspotLayer from './HotspotLayer'
 import HeatmapLayer from './HeatmapLayer'
-import type { GeoJSONCollection, ActiveLayers } from '../../types'
+import FilterPanel from '../Filter/FilterPanel'
+import type { GeoJSONCollection, ActiveLayers, FilterState } from '../../types'
 
 // Fix default Leaflet icon URLs for bundlers
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl
@@ -23,6 +24,8 @@ interface Props {
   activeLayers: ActiveLayers
   onLayersChange: (layers: ActiveLayers) => void
   onHotspotClick: (id: number) => void
+  filters: FilterState
+  onFilterChange: (filters: FilterState) => void
 }
 
 // Jakarta center
@@ -53,20 +56,25 @@ export default function MapView({
   activeLayers,
   onLayersChange,
   onHotspotClick,
+  filters,
+  onFilterChange,
 }: Props) {
   return (
     <div className="map-wrapper">
-      {/* Layer toggles */}
-      <div className="map-layer-controls">
-        {(Object.keys(activeLayers) as (keyof ActiveLayers)[]).map(key => (
-          <button
-            key={key}
-            className={`btn btn-sm me-1 ${activeLayers[key] ? 'btn-dark' : 'btn-outline-dark'}`}
-            onClick={() => onLayersChange({ ...activeLayers, [key]: !activeLayers[key] })}
-          >
-            {key === 'markers' ? '📍 Marker' : key === 'heatmap' ? '🌡️ Heatmap' : '🔥 Hotspot'}
-          </button>
-        ))}
+      {/* Layer toggles & Filters */}
+      <div className="map-layer-controls d-flex flex-wrap gap-3 align-items-center">
+        <div className="d-flex gap-1 border-end pe-3">
+          {(Object.keys(activeLayers) as (keyof ActiveLayers)[]).map(key => (
+            <button
+              key={key}
+              className={`btn btn-sm me-1 ${activeLayers[key] ? 'btn-dark' : 'btn-outline-dark'}`}
+              onClick={() => onLayersChange({ ...activeLayers, [key]: !activeLayers[key] })}
+            >
+              {key === 'markers' ? '📍 Marker' : key === 'heatmap' ? '🌡️ Heatmap' : '🔥 Hotspot'}
+            </button>
+          ))}
+        </div>
+        <FilterPanel filters={filters} onFilterChange={onFilterChange} />
       </div>
 
       <MapContainer

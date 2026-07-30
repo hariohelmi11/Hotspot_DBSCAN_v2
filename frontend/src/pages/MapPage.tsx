@@ -69,7 +69,6 @@ export default function MapPage() {
         <AdminPage />
       ) : (
         <>
-          <FilterPanel filters={filters} onFilterChange={setFilters} />
 
           {/* Map + SidePanel row */}
           <div className="map-row">
@@ -80,6 +79,8 @@ export default function MapPage() {
                 activeLayers={activeLayers}
                 onLayersChange={setActiveLayers}
                 onHotspotClick={handleHotspotClick}
+                filters={filters}
+                onFilterChange={setFilters}
               />
             </div>
             {sidePanelOpen && selectedHotspot && (

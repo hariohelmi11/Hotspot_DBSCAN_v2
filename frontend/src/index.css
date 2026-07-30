@@ -42,7 +42,7 @@ body {
 .map-layer-controls {
   position: absolute;
   top: 10px;
-  left: 10px;
+  left: 55px;
   z-index: 1000;
   background: rgba(255,255,255,0.95);
   padding: 6px 8px;

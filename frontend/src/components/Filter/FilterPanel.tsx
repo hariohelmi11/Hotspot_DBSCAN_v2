@@ -14,7 +14,7 @@ export default function FilterPanel({ filters, onFilterChange }: Props) {
     onFilterChange({ ...filters, [key]: value })
 
   return (
-    <div className="filter-panel bg-white border-bottom px-3 py-2 d-flex flex-wrap gap-3 align-items-center">
+    <div className="filter-panel d-flex flex-wrap gap-3 align-items-center">
       {/* Tahun */}
       <div className="d-flex align-items-center gap-2">
         <label className="form-label mb-0 fw-semibold small">Tahun</label>
